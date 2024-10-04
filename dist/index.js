@@ -48843,34 +48843,6 @@ function CreateMarkDownContents(findings) {
     markdownContent += `| ${finding.title} | ${finding.description} | ${finding.severity} | ${finding.inspectorScore} | ${finding.exploitAvailable} | ${finding.fixAvailable} |  ${finding.status} |
 `;
   });
-  findings.forEach((finding) => {
-    markdownContent += `
-### Resources for ${finding.title}
-`;
-    markdownContent += `| Resource Type | Resource ID | Region |
-`;
-    markdownContent += `|---------------|-------------|--------|
-`;
-    finding.resources?.forEach((resource) => {
-      markdownContent += `| ${resource.type} | ${resource.id} | ${resource.region} |
-`;
-    });
-    if (finding.remediation) {
-      markdownContent += `
-### Remediation for ${finding.title}
-`;
-      markdownContent += `| Recommendation | More Info |
-`;
-      markdownContent += `|----------------|-----------|
-`;
-      markdownContent += `| ${finding.remediation.recommendation?.text || "N/A"} | [Link](${finding.remediation.recommendation?.Url || "#"}) |
-`;
-    }
-    markdownContent += `
----
-
-`;
-  });
   return markdownContent;
 }
 
@@ -48896,13 +48868,21 @@ async function GetVulnerabilities(input) {
       //severity: [
       //  {
       //    comparison: StringComparison.EQUALS,
-      //    value: "High",
+      //    value: "HIGH",
       //  },
       //],
     }
   });
   try {
     const response = await client.send(cmd);
+    response.findings?.sort((a, b) => {
+      if (a.severity == b.severity) {
+        return 0;
+      }
+      if (a.severity === void 0) return 1;
+      if (b.severity === void 0) return -1;
+      return a.severity > b.severity ? -1 : 1;
+    });
     return response.findings;
   } catch (error) {
     console.log(error);

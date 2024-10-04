@@ -24,7 +24,7 @@ export async function GetVulnerabilities(input: Input) {
       //severity: [
       //  {
       //    comparison: StringComparison.EQUALS,
-      //    value: "High",
+      //    value: "HIGH",
       //  },
       //],
     },
@@ -32,6 +32,15 @@ export async function GetVulnerabilities(input: Input) {
  
   try {
     const response = await client.send(cmd);
+    // sort by severity
+    response.findings?.sort((a, b) => {
+      if (a.severity == b.severity) {
+        return 0;
+      }
+      if (a.severity === undefined) return 1;
+      if (b.severity === undefined) return -1;
+      return a.severity > b.severity ? -1 : 1;
+    });
     return response.findings;
   } catch (error) {
     console.log(error);
