@@ -48842,7 +48842,9 @@ function CreateMarkDownContents(findings) {
 `;
   summaryContent += `|-------|----------|-----------------|
 `;
-  let detailsContent = "";
+  let detailsContent = `## Details
+
+`;
   findings.forEach((finding) => {
     summaryContent += `| ${finding.title ?? "N/A"} | ${finding.severity ?? "N/A"} | ${finding.inspectorScore ?? "N/A"} |
 `;
@@ -48861,10 +48863,9 @@ function CreateMarkDownContents(findings) {
     childContent += "```\n" + formattedDescription + "\n```\n</details>\n\n";
     detailsContent += childContent;
   });
-  summaryContent += `
+  markdownContent += summaryContent + `
 
 `;
-  markdownContent += summaryContent;
   markdownContent += detailsContent;
   return markdownContent;
 }

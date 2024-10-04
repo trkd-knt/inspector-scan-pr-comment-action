@@ -7,7 +7,7 @@ export function CreateMarkDownContents(findings: Finding[]) {
   summaryContent += `| Title | Severity | Inspector Score |\n`;
   summaryContent += `|-------|----------|-----------------|\n`;
 
-  let detailsContent = "";
+  let detailsContent = `## Details\n\n`;
 
   findings.forEach(finding => {
     summaryContent += `| ${finding.title ?? "N/A"} | ${finding.severity ?? "N/A"} | ${finding.inspectorScore ?? "N/A"} |\n`;
@@ -27,9 +27,7 @@ export function CreateMarkDownContents(findings: Finding[]) {
     detailsContent += childContent;
   });
 
-  summaryContent += `\n\n`;
-
-  markdownContent += summaryContent;
+  markdownContent += summaryContent + `\n\n`;
   markdownContent += detailsContent;
 
   return markdownContent;
