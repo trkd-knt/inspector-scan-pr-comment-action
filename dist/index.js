@@ -48835,14 +48835,29 @@ function CreateMarkDownContents(findings) {
   let markdownContent = `# Vulnerability Report
 
 `;
-  markdownContent += `| Title | Severity | Inspector Score | Exploit Available | Fix Available |Status |
+  let summaryContent = `| Title | Severity | Inspector Score | Updated At |
 `;
-  markdownContent += `|-------|----------|-----------------|-------------------|---------------|--------|
+  summaryContent += `|-------|----------|-----------------|------------|
 `;
+  let detailsContent = "";
   findings.forEach((finding) => {
-    markdownContent += `| ${finding.title} | ${finding.severity} | ${finding.inspectorScore} | ${finding.exploitAvailable} | ${finding.fixAvailable} |  ${finding.status} |
+    summaryContent += `| ${finding.title ?? "N/A"} | ${finding.severity ?? "N/A"} | ${finding.inspectorScore ?? "N/A"} | ${finding.updatedAt ?? "N/A"} |
 `;
+    let childContent = `| VulnerabilityId | Source | VendorSeverity | CVSS | SourceUrl | UpdatedAt |
+`;
+    childContent += `|----------------|--------|----------------|------|-----------|-----------|
+`;
+    childContent += `| ${finding.packageVulnerabilityDetails?.vulnerabilityId ?? "N/A"} | ${finding.packageVulnerabilityDetails?.source ?? "N/A"} | ${finding.packageVulnerabilityDetails?.vendorSeverity ?? "N/A"} | ${finding.packageVulnerabilityDetails?.cvss ?? "N/A"} | ${finding.packageVulnerabilityDetails?.sourceUrl ?? "N/A"} | ${finding.packageVulnerabilityDetails?.vendorUpdatedAt ?? "N/A"} |
+`;
+    childContent += `
+<details><summary>Vulnerability Description</summary>
+
+`;
+    childContent += "```\n" + (finding.description ?? "No description available.") + "\n```\n</details>\n\n";
+    detailsContent += childContent;
   });
+  markdownContent += summaryContent;
+  markdownContent += detailsContent;
   return markdownContent;
 }
 
