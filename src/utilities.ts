@@ -3,11 +3,11 @@ import { Finding } from "@aws-sdk/client-inspector2";
 export function CreateMarkDownContents(findings: Finding[]){
   let markdownContent = `# Vulnerability Report\n\n`;
 
-  markdownContent += `| Title | Description | Severity | Inspector Score | Exploit Available | Fix Available |Status |\n`;
-  markdownContent += `|-------|-------------|----------|-----------------|-------------------|---------------|--------|\n`;
+  markdownContent += `| Title | Severity | Inspector Score | Exploit Available | Fix Available |Status |\n`;
+  markdownContent += `|-------|----------|-----------------|-------------------|---------------|--------|\n`;
 
   findings.forEach(finding => {
-    markdownContent += `| ${finding.title} | ${finding.description} | ${finding.severity} | ${finding.inspectorScore} | ${finding.exploitAvailable} | ${finding.fixAvailable} |  ${finding.status} |\n`;
+    markdownContent += `| ${finding.title} | ${finding.severity} | ${finding.inspectorScore} | ${finding.exploitAvailable} | ${finding.fixAvailable} |  ${finding.status} |\n`;
   });
 
   //findings.forEach(finding => {

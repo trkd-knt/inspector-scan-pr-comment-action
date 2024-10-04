@@ -39,7 +39,7 @@ export async function GetVulnerabilities(input: Input) {
       }
       if (a.severity === undefined) return 1;
       if (b.severity === undefined) return -1;
-      return a.severity > b.severity ? -1 : 1;
+      return a.severity > b.severity ? 1 : -1;
     });
     return response.findings;
   } catch (error) {

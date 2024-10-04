@@ -48835,12 +48835,12 @@ function CreateMarkDownContents(findings) {
   let markdownContent = `# Vulnerability Report
 
 `;
-  markdownContent += `| Title | Description | Severity | Inspector Score | Exploit Available | Fix Available |Status |
+  markdownContent += `| Title | Severity | Inspector Score | Exploit Available | Fix Available |Status |
 `;
-  markdownContent += `|-------|-------------|----------|-----------------|-------------------|---------------|--------|
+  markdownContent += `|-------|----------|-----------------|-------------------|---------------|--------|
 `;
   findings.forEach((finding) => {
-    markdownContent += `| ${finding.title} | ${finding.description} | ${finding.severity} | ${finding.inspectorScore} | ${finding.exploitAvailable} | ${finding.fixAvailable} |  ${finding.status} |
+    markdownContent += `| ${finding.title} | ${finding.severity} | ${finding.inspectorScore} | ${finding.exploitAvailable} | ${finding.fixAvailable} |  ${finding.status} |
 `;
   });
   return markdownContent;
@@ -48881,7 +48881,7 @@ async function GetVulnerabilities(input) {
       }
       if (a.severity === void 0) return 1;
       if (b.severity === void 0) return -1;
-      return a.severity > b.severity ? -1 : 1;
+      return a.severity > b.severity ? 1 : -1;
     });
     return response.findings;
   } catch (error) {
