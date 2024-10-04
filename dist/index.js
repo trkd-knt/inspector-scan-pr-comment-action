@@ -48835,27 +48835,35 @@ function CreateMarkDownContents(findings) {
   let markdownContent = `# Vulnerability Report
 
 `;
-  let summaryContent = `| Title | Severity | Inspector Score | Updated At |
+  let summaryContent = `## Summary
+
 `;
-  summaryContent += `|-------|----------|-----------------|------------|
+  summaryContent += `| Title | Severity | Inspector Score |
+`;
+  summaryContent += `|-------|----------|-----------------|
 `;
   let detailsContent = "";
   findings.forEach((finding) => {
-    summaryContent += `| ${finding.title ?? "N/A"} | ${finding.severity ?? "N/A"} | ${finding.inspectorScore ?? "N/A"} | ${finding.updatedAt ?? "N/A"} |
+    summaryContent += `| ${finding.title ?? "N/A"} | ${finding.severity ?? "N/A"} | ${finding.inspectorScore ?? "N/A"} |
 `;
+    const vendorUpdatedAtJST = finding.packageVulnerabilityDetails?.vendorUpdatedAt ? new Intl.DateTimeFormat("ja-JP", { timeZone: "Asia/Tokyo", dateStyle: "medium", timeStyle: "short" }).format(new Date(finding.packageVulnerabilityDetails.vendorUpdatedAt)) : "N/A";
     let childContent = `| VulnerabilityId | Source | VendorSeverity | CVSS | SourceUrl | UpdatedAt |
 `;
     childContent += `|----------------|--------|----------------|------|-----------|-----------|
 `;
-    childContent += `| ${finding.packageVulnerabilityDetails?.vulnerabilityId ?? "N/A"} | ${finding.packageVulnerabilityDetails?.source ?? "N/A"} | ${finding.packageVulnerabilityDetails?.vendorSeverity ?? "N/A"} | ${finding.packageVulnerabilityDetails?.cvss ?? "N/A"} | ${finding.packageVulnerabilityDetails?.sourceUrl ?? "N/A"} | ${finding.packageVulnerabilityDetails?.vendorUpdatedAt ?? "N/A"} |
+    childContent += `| ${finding.packageVulnerabilityDetails?.vulnerabilityId ?? "N/A"} | ${finding.packageVulnerabilityDetails?.source ?? "N/A"} | ${finding.packageVulnerabilityDetails?.vendorSeverity ?? "N/A"} | ${finding.packageVulnerabilityDetails?.cvss?.[0]?.baseScore ?? "N/A"} | ${finding.packageVulnerabilityDetails?.sourceUrl ?? "N/A"} | ${vendorUpdatedAtJST} |
 `;
     childContent += `
 <details><summary>Vulnerability Description</summary>
 
 `;
-    childContent += "```\n" + (finding.description ?? "No description available.") + "\n```\n</details>\n\n";
+    const formattedDescription = finding.description?.replace(/. /g, ".\n") ?? "No description available.";
+    childContent += "```\n" + formattedDescription + "\n```\n</details>\n\n";
     detailsContent += childContent;
   });
+  summaryContent += `
+
+`;
   markdownContent += summaryContent;
   markdownContent += detailsContent;
   return markdownContent;
