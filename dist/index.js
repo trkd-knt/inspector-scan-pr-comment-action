@@ -1373,9 +1373,9 @@ var require_timers = __commonJS({
       }
     }
     var Timeout = class {
-      constructor(callback, delay, opaque) {
+      constructor(callback, delay2, opaque) {
         this.callback = callback;
-        this.delay = delay;
+        this.delay = delay2;
         this.opaque = opaque;
         this.state = -2;
         this.refresh();
@@ -1394,8 +1394,8 @@ var require_timers = __commonJS({
       }
     };
     module2.exports = {
-      setTimeout(callback, delay, opaque) {
-        return delay < 1e3 ? setTimeout(callback, delay, opaque) : new Timeout(callback, delay, opaque);
+      setTimeout(callback, delay2, opaque) {
+        return delay2 < 1e3 ? setTimeout(callback, delay2, opaque) : new Timeout(callback, delay2, opaque);
       },
       clearTimeout(timeout) {
         if (timeout instanceof Timeout) {
@@ -10484,7 +10484,7 @@ var require_mock_utils = __commonJS({
       if (mockDispatch2.data.callback) {
         mockDispatch2.data = { ...mockDispatch2.data, ...mockDispatch2.data.callback(opts) };
       }
-      const { data: { statusCode, data, headers, trailers, error }, delay, persist } = mockDispatch2;
+      const { data: { statusCode, data, headers, trailers, error }, delay: delay2, persist } = mockDispatch2;
       const { timesInvoked, times } = mockDispatch2;
       mockDispatch2.consumed = !persist && timesInvoked >= times;
       mockDispatch2.pending = timesInvoked < times;
@@ -10493,10 +10493,10 @@ var require_mock_utils = __commonJS({
         handler2.onError(error);
         return true;
       }
-      if (typeof delay === "number" && delay > 0) {
+      if (typeof delay2 === "number" && delay2 > 0) {
         setTimeout(() => {
           handleReply(this[kDispatches]);
-        }, delay);
+        }, delay2);
       } else {
         handleReply(this[kDispatches]);
       }
@@ -27337,8 +27337,8 @@ var require_dist_cjs20 = __commonJS({
         }
         this.refillTokenBucket();
         if (amount > this.currentCapacity) {
-          const delay = (amount - this.currentCapacity) / this.fillRate * 1e3;
-          await new Promise((resolve) => setTimeout(resolve, delay));
+          const delay2 = (amount - this.currentCapacity) / this.fillRate * 1e3;
+          await new Promise((resolve) => setTimeout(resolve, delay2));
         }
         this.currentCapacity = this.currentCapacity - amount;
       }
@@ -27420,8 +27420,8 @@ var require_dist_cjs20 = __commonJS({
       const computeNextBackoffDelay = /* @__PURE__ */ __name((attempts) => {
         return Math.floor(Math.min(MAXIMUM_RETRY_DELAY, Math.random() * 2 ** attempts * delayBase));
       }, "computeNextBackoffDelay");
-      const setDelayBase = /* @__PURE__ */ __name((delay) => {
-        delayBase = delay;
+      const setDelayBase = /* @__PURE__ */ __name((delay2) => {
+        delayBase = delay2;
       }, "setDelayBase");
       return {
         computeNextBackoffDelay,
@@ -30944,9 +30944,9 @@ var require_dist_cjs33 = __commonJS({
                 attempts
               );
               const delayFromResponse = getDelayFromRetryAfterHeader(err.$response);
-              const delay = Math.max(delayFromResponse || 0, delayFromDecider);
-              totalDelay += delay;
-              await new Promise((resolve) => setTimeout(resolve, delay));
+              const delay2 = Math.max(delayFromResponse || 0, delayFromDecider);
+              totalDelay += delay2;
+              await new Promise((resolve) => setTimeout(resolve, delay2));
               continue;
             }
             if (!err.$metadata) {
@@ -31112,9 +31112,9 @@ var require_dist_cjs33 = __commonJS({
               throw lastError;
             }
             attempts = retryToken.getRetryCount();
-            const delay = retryToken.getRetryDelay();
-            totalRetryDelay += delay;
-            await new Promise((resolve) => setTimeout(resolve, delay));
+            const delay2 = retryToken.getRetryDelay();
+            totalRetryDelay += delay2;
+            await new Promise((resolve) => setTimeout(resolve, delay2));
           }
         }
       } else {
@@ -48905,20 +48905,35 @@ async function GetVulnerabilities(input) {
       ]
     }
   });
-  try {
-    const response = await client.send(cmd);
-    response.findings?.sort((a, b) => {
-      if (a.inspectorScore == b.inspectorScore) {
-        return 0;
+  const maxRetries = 10;
+  const waitTime = 3e4;
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const response = await client.send(cmd);
+      if (response.findings?.length === 0) {
+        console.log(`Attempt ${attempt + 1}: No findings found. Retrying in 30 seconds...`);
+        await delay(waitTime);
+        continue;
       }
-      if (a.inspectorScore === void 0) return 1;
-      if (b.inspectorScore === void 0) return -1;
-      return a.inspectorScore > b.inspectorScore ? -1 : 1;
-    });
-    return response.findings;
-  } catch (error) {
-    console.log(error);
+      response.findings?.sort((a, b) => {
+        if (a.inspectorScore === b.inspectorScore) {
+          return 0;
+        }
+        if (a.inspectorScore === void 0) return 1;
+        if (b.inspectorScore === void 0) return -1;
+        return a.inspectorScore > b.inspectorScore ? -1 : 1;
+      });
+      return response.findings;
+    } catch (error) {
+      console.log(`Attempt ${attempt + 1}: Error occurred - ${error.message}`);
+      await delay(waitTime);
+    }
   }
+  console.log("Maximum attempts reached. No findings found.");
+  return [];
+}
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // src/index.ts
