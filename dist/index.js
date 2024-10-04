@@ -48789,7 +48789,7 @@ async function GetGithubContexts(githubToken) {
   return contexts;
 }
 async function PostGithubPRComment(githubToken, input, contents) {
-  const octokit = new Octokit2({ auth: githubToken });
+  const octokit = new Octokit2();
   try {
     const { owner, repo } = input.gitContext.repo;
     const pull_number = input.gitContext.issue.number == void 0 ? 4 : input.gitContext.issue.number;

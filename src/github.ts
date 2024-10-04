@@ -17,7 +17,7 @@ export async function GetGithubContexts(githubToken: string): Promise<Contexts> 
 
 export async function PostGithubPRComment(githubToken: string, input: Contexts, contents: string) {
 
-  const octokit = new Octokit({ auth: githubToken });
+  const octokit = new Octokit();
   try {
     const { owner, repo } = input.gitContext.repo;
     const pull_number = input.gitContext.issue.number == undefined ? 4 : input.gitContext.issue.number;
