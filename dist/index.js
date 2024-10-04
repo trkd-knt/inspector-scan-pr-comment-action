@@ -48835,6 +48835,11 @@ function CreateMarkDownContents(findings) {
   let markdownContent = `# Vulnerability Report
 
 `;
+  if (findings.length === 0) {
+    markdownContent += `No vulnerabilities found!!
+`;
+    return markdownContent;
+  }
   let summaryContent = `## Summary
 
 `;

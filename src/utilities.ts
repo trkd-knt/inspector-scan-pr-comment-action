@@ -3,6 +3,11 @@ import { Finding } from "@aws-sdk/client-inspector2";
 export function CreateMarkDownContents(findings: Finding[]) {
   let markdownContent = `# Vulnerability Report\n\n`;
 
+  if (findings.length === 0) {
+    markdownContent += `No vulnerabilities found!!\n`;
+    return markdownContent;
+  }
+
   let summaryContent = `## Summary\n\n`;
   summaryContent += `| Title | Severity | Inspector Score |\n`;
   summaryContent += `|-------|----------|-----------------|\n`;
