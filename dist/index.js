@@ -48895,10 +48895,12 @@ async function run() {
   const repositoryName = core.getInput("repository-name");
   const imageTag = core.getInput("image-tag");
   const region = core.getInput("region");
+  const thresholdScore = core.getInput("threshold-score");
   const input = {
     repositoryName,
     imageTag,
-    region
+    region,
+    thresholdScore: parseInt(thresholdScore)
   };
   const githubContexts = await GetGithubContexts(githubToken);
   const reports = await GetVulnerabilities(input);
