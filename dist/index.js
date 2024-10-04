@@ -48788,12 +48788,13 @@ async function GetGithubContexts(githubToken) {
   };
   return contexts;
 }
-async function PostGithubPRComment(githubToken, input, contents) {
-  const octokit = new Octokit2();
+async function PostGithubPRComment(input, contents) {
   try {
     const { owner, repo } = input.gitContext.repo;
+    console.log("owner : " + owner);
+    console.log("repo : " + repo);
     const pull_number = input.gitContext.issue.number == void 0 ? 4 : input.gitContext.issue.number;
-    const comments = await octokit.rest.issues.listComments({
+    const comments = await input.octokit.rest.issues.listComments({
       owner,
       repo,
       issue_number: pull_number
@@ -48807,7 +48808,7 @@ async function PostGithubPRComment(githubToken, input, contents) {
     console.log("filtered_comment : " + filtered_comment.length);
     if (filtered_comment.length == 0) {
       console.log("No comment found");
-      octokit.rest.issues.createComment({
+      input.octokit.rest.issues.createComment({
         owner: input.gitContext.repo.owner,
         repo: input.gitContext.repo.repo,
         issue_number: pull_number,
@@ -48815,7 +48816,7 @@ async function PostGithubPRComment(githubToken, input, contents) {
       });
     } else {
       console.log("Comment found");
-      octokit.rest.issues.updateComment({
+      input.octokit.rest.issues.updateComment({
         owner,
         repo,
         issue_number: pull_number,
@@ -48925,7 +48926,7 @@ async function run() {
     return;
   }
   const contents = CreateMarkDownContents(reports);
-  PostGithubPRComment(githubToken, githubContexts, contents);
+  PostGithubPRComment(githubContexts, contents);
   core.setOutput("result", reports);
 }
 run();

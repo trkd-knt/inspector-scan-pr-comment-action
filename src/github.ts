@@ -15,14 +15,16 @@ export async function GetGithubContexts(githubToken: string): Promise<Contexts> 
   return contexts;
 }
 
-export async function PostGithubPRComment(githubToken: string, input: Contexts, contents: string) {
+export async function PostGithubPRComment(input: Contexts, contents: string) {
 
-  const octokit = new Octokit();
   try {
     const { owner, repo } = input.gitContext.repo;
+    console.log('owner : ' + owner);
+    console.log('repo : ' + repo);
+
     const pull_number = input.gitContext.issue.number == undefined ? 4 : input.gitContext.issue.number;
 
-    const comments = await octokit.rest.issues.listComments({
+    const comments = await input.octokit.rest.issues.listComments({
       owner: owner,
       repo: repo,
       issue_number: pull_number
@@ -41,7 +43,7 @@ export async function PostGithubPRComment(githubToken: string, input: Contexts, 
 
     if (filtered_comment.length == 0) {
       console.log('No comment found');
-      octokit.rest.issues.createComment({
+      input.octokit.rest.issues.createComment({
         owner: input.gitContext.repo.owner,
         repo: input.gitContext.repo.repo,
         issue_number: pull_number,
@@ -50,7 +52,7 @@ export async function PostGithubPRComment(githubToken: string, input: Contexts, 
     }
     else{
       console.log('Comment found');
-      octokit.rest.issues.updateComment({
+      input.octokit.rest.issues.updateComment({
         owner: owner,
         repo: repo,
         issue_number: pull_number,
