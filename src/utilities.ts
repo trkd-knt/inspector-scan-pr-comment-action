@@ -15,13 +15,14 @@ export function CreateMarkDownContents(findings: Finding[]) {
     const vendorUpdatedAtJST = finding.packageVulnerabilityDetails?.vendorUpdatedAt
     ? new Intl.DateTimeFormat('ja-JP', { timeZone: 'Asia/Tokyo', dateStyle: 'medium', timeStyle: 'short' }).format(new Date(finding.packageVulnerabilityDetails.vendorUpdatedAt))
     : "N/A";
-    let childContent = `| VulnerabilityId | Source | VendorSeverity | CVSS | SourceUrl | UpdatedAt |\n`;
+    let childContent = `### ${finding.packageVulnerabilityDetails?.vulnerabilityId ?? "N/A"}\n\n`;
+    childContent += `| VulnerabilityId | Source | VendorSeverity | CVSS | SourceUrl | UpdatedAt |\n`;
     childContent += `|----------------|--------|----------------|------|-----------|-----------|\n`;
     childContent += `| ${finding.packageVulnerabilityDetails?.vulnerabilityId ?? "N/A"} | ${finding.packageVulnerabilityDetails?.source ?? "N/A"} | ${finding.packageVulnerabilityDetails?.vendorSeverity ?? "N/A"} | ${finding.packageVulnerabilityDetails?.cvss?.[0]?.baseScore ?? "N/A"} | ${finding.packageVulnerabilityDetails?.sourceUrl ?? "N/A"} | ${vendorUpdatedAtJST} |\n`;
     
     childContent += `\n<details><summary>Vulnerability Description</summary>\n\n`;
 
-    const formattedDescription = finding.description ?? "No description available.";
+    const formattedDescription = finding.description?.replace(/\. /g, '.\n') ?? "No description available.";
     childContent += "```\n" + formattedDescription + "\n```\n</details>\n\n";
     
     detailsContent += childContent;

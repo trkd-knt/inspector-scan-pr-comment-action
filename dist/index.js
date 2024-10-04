@@ -48849,7 +48849,10 @@ function CreateMarkDownContents(findings) {
     summaryContent += `| ${finding.title ?? "N/A"} | ${finding.severity ?? "N/A"} | ${finding.inspectorScore ?? "N/A"} |
 `;
     const vendorUpdatedAtJST = finding.packageVulnerabilityDetails?.vendorUpdatedAt ? new Intl.DateTimeFormat("ja-JP", { timeZone: "Asia/Tokyo", dateStyle: "medium", timeStyle: "short" }).format(new Date(finding.packageVulnerabilityDetails.vendorUpdatedAt)) : "N/A";
-    let childContent = `| VulnerabilityId | Source | VendorSeverity | CVSS | SourceUrl | UpdatedAt |
+    let childContent = `### ${finding.packageVulnerabilityDetails?.vulnerabilityId ?? "N/A"}
+
+`;
+    childContent += `| VulnerabilityId | Source | VendorSeverity | CVSS | SourceUrl | UpdatedAt |
 `;
     childContent += `|----------------|--------|----------------|------|-----------|-----------|
 `;
@@ -48859,7 +48862,7 @@ function CreateMarkDownContents(findings) {
 <details><summary>Vulnerability Description</summary>
 
 `;
-    const formattedDescription = finding.description ?? "No description available.";
+    const formattedDescription = finding.description?.replace(/\. /g, ".\n") ?? "No description available.";
     childContent += "```\n" + formattedDescription + "\n```\n</details>\n\n";
     detailsContent += childContent;
   });
