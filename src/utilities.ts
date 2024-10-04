@@ -21,7 +21,7 @@ export function CreateMarkDownContents(findings: Finding[]) {
     
     childContent += `\n<details><summary>Vulnerability Description</summary>\n\n`;
 
-    const formattedDescription = finding.description?.replace(/. /g, '.\n') ?? "No description available.";
+    const formattedDescription = finding.description ?? "No description available.";
     childContent += "```\n" + formattedDescription + "\n```\n</details>\n\n";
     
     detailsContent += childContent;

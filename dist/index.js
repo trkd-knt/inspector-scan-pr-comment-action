@@ -48857,7 +48857,7 @@ function CreateMarkDownContents(findings) {
 <details><summary>Vulnerability Description</summary>
 
 `;
-    const formattedDescription = finding.description?.replace(/. /g, ".\n") ?? "No description available.";
+    const formattedDescription = finding.description ?? "No description available.";
     childContent += "```\n" + formattedDescription + "\n```\n</details>\n\n";
     detailsContent += childContent;
   });
