@@ -11,6 +11,7 @@ async function run() {
   const repositoryName = core.getInput('repository-name');
   const imageTag = core.getInput('image-tag');
   const region = core.getInput('region');
+  const thresholdScore = core.getInput('threshold-score');
   // const repositoryName = process.env.REPOSITORY_NAME || core.getInput('repository-name');
   // const imageTag = process.env.IMAGE_TAG || core.getInput('image-tag');
   // const region = process.env.REGION || core.getInput('region');
@@ -18,7 +19,8 @@ async function run() {
   const input: Input = {
     repositoryName: repositoryName,
     imageTag: imageTag,
-    region: region
+    region: region,
+    thresholdScore: parseInt(thresholdScore),
   }
 
   // get github contexts

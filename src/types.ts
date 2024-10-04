@@ -10,4 +10,5 @@ export type Input = {
   repositoryName: string;
   imageTag: string;
   region: string;
+  thresholdScore?: number;
 }
