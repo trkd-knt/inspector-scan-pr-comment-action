@@ -1,0 +1,22 @@
+name: 'Amazon Inspector Commented Action'
+description: 'Comment Amazon Inspector findings to GitHub PR'
+
+inputs:
+  repository-name:
+    description: 'ECR repository name'
+    required: true
+  github-token:
+    description: 'GitHub token'
+    required: true
+  image-tag:
+    description: 'Docker image tag'
+    required: true
+    default: 'latest'
+  region:
+    description: 'AWS region in ECR repository is located'
+    required: true
+    default: 'ap-northeast-1'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
