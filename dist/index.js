@@ -48864,13 +48864,18 @@ async function GetVulnerabilities(input) {
           comparison: import_client_inspector2.StringComparison.EQUALS,
           value: input.imageTag
         }
-      ]
+      ],
       //severity: [
       //  {
       //    comparison: StringComparison.EQUALS,
       //    value: "HIGH",
       //  },
       //],
+      inspectorScore: [
+        {
+          lowerInclusive: Number(input.thresholdScore)
+        }
+      ]
     }
   });
   try {

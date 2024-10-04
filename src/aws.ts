@@ -27,12 +27,17 @@ export async function GetVulnerabilities(input: Input) {
       //    value: "HIGH",
       //  },
       //],
+      inspectorScore: [
+        {
+          lowerInclusive: Number(input.thresholdScore),
+        },
+      ],
     },
   });
  
   try {
     const response = await client.send(cmd);
-    // sort by severity
+    // sort by score
     response.findings?.sort((a, b) => {
       if (a.inspectorScore == b.inspectorScore) {
         return 0;
