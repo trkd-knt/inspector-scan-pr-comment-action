@@ -6,6 +6,7 @@ import { Octokit } from '@octokit/rest';
 export async function GetGithubContexts(githubToken: string): Promise<Contexts> {
   const context = github.context;
   const octokit = new Octokit({ auth: githubToken });
+  console.log(githubToken)
 
   const contexts: Contexts = {
     octokit: octokit,
@@ -16,6 +17,7 @@ export async function GetGithubContexts(githubToken: string): Promise<Contexts> 
 }
 
 export async function PostGithubPRComment(input: Contexts, contents: string) {
+
   try {
     const { owner, repo } = input.gitContext.repo;
     const pull_number = input.gitContext.issue.number == undefined ? 4 : input.gitContext.issue.number;

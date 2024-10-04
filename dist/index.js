@@ -48782,6 +48782,7 @@ var Octokit2 = Octokit.plugin(requestLog, legacyRestEndpointMethods, paginateRes
 async function GetGithubContexts(githubToken) {
   const context2 = github.context;
   const octokit = new Octokit2({ auth: githubToken });
+  console.log(githubToken);
   const contexts = {
     octokit,
     gitContext: context2
@@ -48924,7 +48925,6 @@ async function run() {
     return;
   }
   const contents = CreateMarkDownContents(reports);
-  console.log(contents);
   PostGithubPRComment(githubContexts, contents);
   core.setOutput("result", reports);
 }

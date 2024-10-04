@@ -30,7 +30,6 @@ async function run() {
   }
 
   const contents = CreateMarkDownContents(reports as Finding[]);
-  console.log(contents);
   PostGithubPRComment(githubContexts, contents);
 
   core.setOutput('result', reports);
