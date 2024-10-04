@@ -34,12 +34,12 @@ export async function GetVulnerabilities(input: Input) {
     const response = await client.send(cmd);
     // sort by severity
     response.findings?.sort((a, b) => {
-      if (a.severity == b.severity) {
+      if (a.inspectorScore == b.inspectorScore) {
         return 0;
       }
-      if (a.severity === undefined) return 1;
-      if (b.severity === undefined) return -1;
-      return a.severity > b.severity ? 1 : -1;
+      if (a.inspectorScore === undefined) return 1;
+      if (b.inspectorScore === undefined) return -1;
+      return a.inspectorScore > b.inspectorScore ? -1 : 1;
     });
     return response.findings;
   } catch (error) {

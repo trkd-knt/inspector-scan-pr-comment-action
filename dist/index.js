@@ -48876,12 +48876,12 @@ async function GetVulnerabilities(input) {
   try {
     const response = await client.send(cmd);
     response.findings?.sort((a, b) => {
-      if (a.severity == b.severity) {
+      if (a.inspectorScore == b.inspectorScore) {
         return 0;
       }
-      if (a.severity === void 0) return 1;
-      if (b.severity === void 0) return -1;
-      return a.severity > b.severity ? 1 : -1;
+      if (a.inspectorScore === void 0) return 1;
+      if (b.inspectorScore === void 0) return -1;
+      return a.inspectorScore > b.inspectorScore ? -1 : 1;
     });
     return response.findings;
   } catch (error) {
