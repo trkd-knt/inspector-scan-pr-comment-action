@@ -27,9 +27,7 @@ async function run() {
   const githubContexts = await GetGithubContexts(githubToken);
   // get vulnerability from inspector
   const reports = await GetVulnerabilities(input);
-  if (reports == undefined) {
-    return;
-  }
+  console.log(reports);
 
   const contents = CreateMarkDownContents(reports as Finding[]);
   PostGithubPRComment(githubContexts, contents);

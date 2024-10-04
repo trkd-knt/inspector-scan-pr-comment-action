@@ -48909,9 +48909,7 @@ async function run() {
   };
   const githubContexts = await GetGithubContexts(githubToken);
   const reports = await GetVulnerabilities(input);
-  if (reports == void 0) {
-    return;
-  }
+  console.log(reports);
   const contents = CreateMarkDownContents(reports);
   PostGithubPRComment(githubContexts, contents);
   core.setOutput("result", reports);
